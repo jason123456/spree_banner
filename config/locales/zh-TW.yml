@@ -1,4 +1,4 @@
-en:
+zh-TW:
   images_only: "deve essere JPG, JPEG, PNG o GIF"
   banner_box_settings: "Banner Settings"
   add_new_banner_style: "Add New Banner Style"
@@ -14,11 +14,12 @@ en:
   new_banner_box: "New Banner"
   listing_banner_boxes: "Listing Banners"
   enabled: Enabled?
-  url: Link url
-  type: Type
-  type_external_url: External URL
-  type_products: Products
-  type_promotion: Promotion
+  url: 連結項目
+  banner_type: 連結類型
+  type_external_url: 連外URL
+  type_products: 商品
+  type_promotion: 促銷方案
+  alt_text: 文案
   attachment: Attachment
   category: Category
   banner_boxes: Banners

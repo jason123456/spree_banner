@@ -4,6 +4,7 @@ Spree::Core::Engine.routes.draw do
     resources :banner_boxes do
       collection do
         post :update_positions
+        get :find_promotion
       end
       member do
         get :clone
@@ -11,4 +12,5 @@ Spree::Core::Engine.routes.draw do
     end
     resource :banner_box_settings
   end
+  
 end

@@ -6,7 +6,7 @@
   <div class="toolbar" data-hook="toolbar">
     <ul class="actions header-action-links inline-menu">
       <li id="new_banner_box_link">
-        <%= button_link_to t(:new_banner_box), new_object_url, { :remote => true, :icon => 'icon-plus', :id => 'admin_new_banner_box' } %>
+        <%= button_link_to t(:new_banner_box), new_object_url, {  :remote => true, :icon => 'icon-plus', :id => 'admin_new_banner_box' } %>
       </li>
     </ul>
   </div>
@@ -24,16 +24,10 @@
     <%= search_form_for [:admin, @search] do |f| %>
         <%- locals = {:f => f} %>
         <div data-hook="admin_banner_index_search">
-          <div class="alpha four columns">
-            <div class="field">
-              <%= f.label :category_eq, Spree.t(:category) %>
-              <%= f.select :category_eq, Spree::BannerBox.categories_for_select, {:include_blank => true}, {:class => 'select2 fullwidth'} %>
-            </div>
-          </div>
           <div class="eight columns">
             <div class="field">
-              <%= f.label :url_cont, Spree.t(:url) %>
-              <%= f.text_field :url_cont, :size => 15 %>
+              <%= f.label :category_cont, t(:category) %>
+              <%= f.text_field :category_cont, :size => 15 %>
             </div>
           </div>
           <div class="three columns omega">
@@ -70,6 +64,8 @@
   <tr data-hook="admin_banner_index_headers">
     <th colspan="2"><%= t(:thumbnail) %></th>
     <th><%= t(:category) %></th>
+    <th><%= t(:alt_text) %></th>
+    <th><%= t(:banner_type) %></th>
     <th><%= t(:url) %></th>
     <th data-hook="admin_banner_index_header_actions" class="actions"></th>
   </tr>
@@ -82,7 +78,17 @@
     </td>
     <td class="align-center"><%= image_tag(banner_box.attachment(:mini)) %></td>
     <td class="align-center"><%= banner_box.category rescue '' %></td>
-    <td class="align-center"><%= banner_box.url rescue '' %></td>
+    <td class="align-center"><%= banner_box.alt_text rescue '' %></td>
+    <td class="align-center"><%= t("type_#{banner_box.banner_type}") %></td>
+    
+    <% if banner_box.banner_type == 'external_url' %>
+    	<td class="align-center"><%= banner_box.url rescue '' %></td>
+	 <% elsif banner_box.banner_type == 'products' %>
+
+  	 <% elsif banner_box.banner_type == 'promotion' %>
+    	<td class="align-center"><%= Spree::Activator.find(banner_box.url).name if !banner_box.url.blank?%></td>
+  	 <% end %>
+    
     <td class="actions" data-hook="admin_banner_index_row_actions">
       <%= link_to_edit banner_box, :no_text => true, :class => 'edit' %>
       &nbsp;

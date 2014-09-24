@@ -27,6 +27,16 @@ module Spree
         respond_with(@new) { |format| format.html { redirect_to edit_admin_banner_box_url(@new) } }
       end
       
+      def find_promotion
+        if params[:ids]
+          @promotion = Spree::Activator.find(params[:ids])
+        else
+          @promotion = Spree::Activator.ransack(params[:q]).result
+        end
+        
+        render :json => @promotion
+      end
+      
       protected
       def find_resource
         Spree::BannerBox.find(params[:id])

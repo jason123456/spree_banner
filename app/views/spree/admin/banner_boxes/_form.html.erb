@@ -1,3 +1,24 @@
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#banner_box_banner_type_external_url").click(function(){
+         $('#banner_box_url_field').replaceWith( '<div class="field" id="banner_box_url_field"><label for="banner_box_url">連外URL<span class="required"> *</span></label><input class="fullwidth" id="banner_box_url" name="banner_box[url]" type="text"></div>' );
+		});
+		
+		$("#banner_box_banner_type_products").click(function(){
+         $('#banner_box_url_field').replaceWith( '<div class="field" id="banner_box_url_field"><label for="banner_box_url">商品<span class="required"> *</span></label><input class="product_picker fullwidth" id="product_ids_string" name="banner_box[url]" type="hidden" value="" /></div>' );
+		
+  			$('.product_picker').productAutocomplete();
+		});
+		
+		$("#banner_box_banner_type_promotion").click(function(){
+         $('#banner_box_url_field').replaceWith( '<div class="field" id="banner_box_url_field"><label for="banner_box_url">促銷方案<span class="required"> *</span></label><input class="promotion_picker fullwidth" id="promotion_ids_string" name="banner_box[url]" type="hidden" value="<%= @banner_box.url %>" /></div>' );
+		
+  			$('.promotion_picker').promotionAutocomplete();
+		});
+	});
+
+</script>
+
 <div data-hook="admin_banner_box_form_fields" class="row">
 
   <div class="left eight columns alpha" data-hook="admin_banner_box_form_left">
@@ -6,19 +27,64 @@
       <%= f.text_field :category, :class => 'fullwidth title' %>
       <%= f.error_message_on :category %>
     <% end %>
-
-    <%= f.field_container :url do %>
-      <%= f.label :url, raw(t(:url)) %>
-      <%= f.text_field :url, :class => 'fullwidth title' %>
-      <%= f.error_message_on :url %>
+    
+    <%= f.field_container :alt_text do %>
+      <%= f.label :alt_text, t(:alt_text) %>
+      <%= f.text_field :alt_text, :class => 'fullwidth' %>
+      <%= f.error_message_on :alt_text %>
     <% end %>
+    
+    <%= f.field_container :banner_type do %>
+      <%= f.label :banner_type, raw(t(:banner_type) + content_tag(:span, ' *', :class => 'required')) %><br />
+      <% if @banner_box.banner_type == 'external_url' %>
+	  		<%= f.radio_button :banner_type, :external_url, :checked => true %><%= f.label :banner_type, t(:type_external_url) %><br />
+	  		<%= f.radio_button :banner_type, :products, :checked => false %><%= f.label :banner_type, t(:type_products) %><br />
+	  		<%= f.radio_button :banner_type, :promotion, :checked => false %><%= f.label :banner_type, t(:type_promotion) %>
+	  		
+  		<% elsif @banner_box.banner_type == 'products' %>
+	  	 	<%= f.radio_button :banner_type, :external_url, :checked => false %><%= f.label :banner_type, t(:type_external_url) %><br />
+	  		<%= f.radio_button :banner_type, :products, :checked => true %><%= f.label :banner_type, t(:type_products) %><br />
+	  		<%= f.radio_button :banner_type, :promotion, :checked => false %><%= f.label :banner_type, t(:type_promotion) %>
+
+	  	<% elsif @banner_box.banner_type == 'promotion' %>
+	  		<%= f.radio_button :banner_type, :external_url, :checked => false %><%= f.label :banner_type, t(:type_external_url) %><br />
+  			<%= f.radio_button :banner_type, :products, :checked => false %><%= f.label :banner_type, t(:type_products) %><br />
+  			<%= f.radio_button :banner_type, :promotion, :checked => true %><%= f.label :banner_type, t(:type_promotion) %>
+	  	
+	  	<% end %>
+	  		
+	  	<%= f.error_message_on :url %>
+    <% end %>
+    
+	 <% if @banner_box.banner_type == 'external_url' %>
+    	<%= f.field_container :url do %>
+	      <%= f.label :url, raw(t(:type_external_url) + content_tag(:span, ' *', :class => 'required')) %>
+	      <%= f.text_field :url, :class => 'fullwidth' %>
+	
+	      <%= f.error_message_on :url %>
+	    <% end %>
+  		
+	 <% elsif @banner_box.banner_type == 'products' %>
+  		<div class="field" id="banner_box_url_field">
+  			<label for="banner_box_url">商品<span class="required"> *</span></label>
+  			<input class="product_picker fullwidth" id="product_ids_string" name="banner_box[url]" type="hidden" value="" />
+		</div>
+
+  	 <% elsif @banner_box.banner_type == 'promotion' %>
+  	 	<div class="field" id="banner_box_url_field">
+  			<label for="banner_box_url">促銷方案<span class="required"> *</span></label>
+  			<input class="promotion_picker fullwidth" id="promotion_ids_string" name="banner_box[url]" type="hidden" value="<%= @banner_box.url %>" />
+		</div>
+		
+  	 <% end %>
+    
   </div>
 
   <div class="right eight columns omega" data-hook="admin_banner_box_form_right">
     <% unless f.object.new_record? %>
       <div data-hook="thumbnail" class="field alpha two columns">
         <%= f.label t(:thumbnail) %><br>
-        <%= link_to image_tag(@banner_box.attachment.url(:mini)), @banner_box.attachment.url(:small) %>
+        <%= link_to image_tag(@banner_box.attachment.url(:micro)), @banner_box.attachment.url(:micro) %>
       </div>
     <% end %>
 
@@ -29,17 +95,23 @@
     <% end %>
     <div class="clear"></div>
 
-    <%= f.field_container :alt_text do %>
-      <%= f.label :alt_text, t(:alt_text) %>
-      <%= f.text_field :alt_text, :class => 'fullwidth' %>
-      <%= f.error_message_on :alt_text %>
-    <% end %>
-
     <%= f.field_container :enabled do %>
-      <%= f.label :enabled, t(:enabled) %><br />
+      <%= f.label :enabled, t(:enabled) %>
       <%= f.check_box :enabled %>
       <%= f.error_message_on :enabled %>
     <% end %>
+    
+    <%= f.field_container :available_on do %>
+	   <%= f.label :available_on, Spree.t(:available_on) %>
+	   <%= f.text_field :available_on, :value => datepicker_field_value(@banner_box.available_on), :class => 'datepicker' %>
+	   <%= f.error_message_on :available_on %>
+	 <% end %>
+	
+	 <%= f.field_container :available_off do %>
+	   <%= f.label :available_off, Spree.t(:available_off) %>
+	   <%= f.text_field :available_off, :value => datepicker_field_value(@banner_box.available_off), :class => 'datepicker' %>
+	   <%= f.error_message_on :available_off %>
+	 <% end %>
   </div>
 
   <div class="clear"></div>
@@ -48,3 +120,7 @@
 
   <div class="clear"></div>
 </div>
+
+<script>
+  Spree.routes.promotion_search = "<%= spree.find_promotion_admin_banner_boxes_url(:format => 'json') %>";
+</script>
