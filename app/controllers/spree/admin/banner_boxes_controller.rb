@@ -34,7 +34,8 @@ module Spree
           @promotion = Spree::Activator.ransack(params[:q]).result
         end
         
-        render :json => @promotion
+        
+        render :json => @promotion, :root => true
       end
       
       protected
