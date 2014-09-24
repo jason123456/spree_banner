@@ -50,7 +50,11 @@
 	  		<%= f.radio_button :banner_type, :external_url, :checked => false %><%= f.label :banner_type, t(:type_external_url) %><br />
   			<%= f.radio_button :banner_type, :products, :checked => false %><%= f.label :banner_type, t(:type_products) %><br />
   			<%= f.radio_button :banner_type, :promotion, :checked => true %><%= f.label :banner_type, t(:type_promotion) %>
-	  	
+	  
+	  	<% else %>
+	  		<%= f.radio_button :banner_type, :external_url, :checked => true %><%= f.label :banner_type, t(:type_external_url) %><br />
+	  		<%= f.radio_button :banner_type, :products, :checked => false %><%= f.label :banner_type, t(:type_products) %><br />
+	  		<%= f.radio_button :banner_type, :promotion, :checked => false %><%= f.label :banner_type, t(:type_promotion) %>
 	  	<% end %>
 	  		
 	  	<%= f.error_message_on :url %>
@@ -75,9 +79,16 @@
   			<label for="banner_box_url">促銷方案<span class="required"> *</span></label>
   			<input class="promotion_picker fullwidth" id="promotion_ids_string" name="banner_box[url]" type="hidden" value="<%= @banner_box.url %>" />
 		</div>
-		
+	 <% else %>
+    	 <%= f.field_container :url do %>
+	      <%= f.label :url, raw(t(:type_external_url) + content_tag(:span, ' *', :class => 'required')) %>
+	      <%= f.text_field :url, :class => 'fullwidth' %>
+	
+	      <%= f.error_message_on :url %>
+	    <% end %>
+  		
   	 <% end %>
-    
+ 
   </div>
 
   <div class="right eight columns omega" data-hook="admin_banner_box_form_right">
