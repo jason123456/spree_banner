@@ -5,7 +5,7 @@
 		});
 		
 		$("#banner_box_banner_type_products").click(function(){
-         $('#banner_box_url_field').replaceWith( '<div class="field" id="banner_box_url_field"><label for="banner_box_url">商品<span class="required"> *</span></label><input class="product_picker fullwidth" id="product_ids_string" name="banner_box[url]" type="hidden" value="" /></div>' );
+         $('#banner_box_url_field').replaceWith( '<div class="field" id="banner_box_url_field"><label for="banner_box_url">商品<span class="required"> *</span></label><input class="product_picker fullwidth" id="product_ids_string" name="banner_box_products" type="hidden" value="" /></div>' );
 		
   			$('.product_picker').productAutocomplete();
 		});
@@ -71,7 +71,7 @@
 	 <% elsif @banner_box.banner_type == 'products' %>
   		<div class="field" id="banner_box_url_field">
   			<label for="banner_box_url">商品<span class="required"> *</span></label>
-  			<input class="product_picker fullwidth" id="product_ids_string" name="banner_box[url]" type="hidden" value="" />
+  			<input class="product_picker fullwidth" id="product_ids_string" name="banner_box_products" type="hidden" value="<%= @banner_box.banner_box_products.map(&:product_id).join(',') %>" />
 		</div>
 
   	 <% elsif @banner_box.banner_type == 'promotion' %>

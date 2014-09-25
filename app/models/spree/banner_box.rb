@@ -2,6 +2,9 @@ module Spree
   class BannerBox < ActiveRecord::Base
     acts_as_list :scope => :category
     
+    has_many :banner_box_products
+    has_many :products, :through => :banner_box_products, :source => :product
+  
     has_attached_file :attachment,
                 :url  => "/spree/banners/:id/:style_:basename.:extension",
                 :path => ":rails_root/public/spree/banners/:id/:style_:basename.:extension",

@@ -11,7 +11,16 @@ module Spree
       end
       
       def update
+        if !params[:banner_box_products].blank?
+          params[:banner_box_products].split(",").each do |product|
+            @banner_box_products = @banner_box.banner_box_products.new
+            @banner_box_products.product_id = product
+            @banner_box_products.save!
+          end
+        end
+        
         @banner_box.enhance_settings
+        
         super
       end
 

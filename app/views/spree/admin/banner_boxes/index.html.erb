@@ -55,10 +55,11 @@
 <table class="index sortable" id="listing_banner_boxes" data-sortable-link="<%= update_positions_admin_banner_boxes_url() %>">
   <colgroup>
   <col style="width: 5%">
-  <col style="width: 15%;">
-  <col style="width: 10%;">
-  <col style="width: 10%;">
-  <col style="width: 17%;">
+  <col style="width: 5%;">
+  <col style="width: 20%;">
+  <col style="width: 20%;">
+  <col style="width: 45%;">
+  <col style="width: 5%;">
 </colgroup>
 <thead>
   <tr data-hook="admin_banner_index_headers">
@@ -76,7 +77,7 @@
     <td class="no-border">
       <span class="handle"></span>
     </td>
-    <td class="align-center"><%= image_tag(banner_box.attachment(:mini)) %></td>
+    <td class="align-center"><%= image_tag(banner_box.attachment(:micro)) %></td>
     <td class="align-center"><%= banner_box.category rescue '' %></td>
     <td class="align-center"><%= banner_box.alt_text rescue '' %></td>
     <% if banner_box.banner_type.blank? %>
@@ -88,7 +89,7 @@
     <% if banner_box.banner_type == 'external_url' %>
     	<td class="align-center"><%= banner_box.url rescue '' %></td>
 	 <% elsif banner_box.banner_type == 'products' %>
-
+		<td class="align-center"><%= banner_box.products.map(&:name).join(',') %></td>
   	 <% elsif banner_box.banner_type == 'promotion' %>
     	<td class="align-center"><%= Spree::Activator.find(banner_box.url).name if !banner_box.url.blank?%></td>
   	 <% else %>
