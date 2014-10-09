@@ -11,14 +11,14 @@ module Spree
       end
       
       def update
+        
+        Spree::BannerBoxProduct.destroy_all(:banner_box_id => @banner_box.id)
+        
         if !params[:banner_box_products].blank?
           params[:banner_box_products].split(",").each do |product|
-            @banner_box_products = Spree::BannerBox.where(product_id: product, banner_box_id: @banner_box.id)
-            if @banner_box_products.nil?
-              @banner_box_products = @banner_box.banner_box_products.new
-              @banner_box_products.product_id = product
-              @banner_box_products.save!
-            end
+            @banner_box_products = @banner_box.banner_box_products.new
+            @banner_box_products.product_id = product
+            @banner_box_products.save!
           end
         end
         
